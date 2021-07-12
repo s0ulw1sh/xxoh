@@ -131,6 +131,7 @@ void to_upper_normalize(char *dest, char *source)
         case '@':
         case '$':
         case '*':
+        case ' ':
             dest[i] = '_';
             break;
         default:

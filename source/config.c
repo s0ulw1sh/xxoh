@@ -69,13 +69,12 @@ int xxoh_getopt(int argc, const char *argv[])
                 "Usage: xxoh [options] <file|s>\n\n"
 
                 "Common options:\n"
-                "  -Z, --gzip\t\tUse gzip compression (default: not use)\n"
+                "  -Z, --gzip\t\tUse gzip compression (ON|OFF) (default: OFF)\n"
                 "  -D, --dest\t\tSingle destination file (default: <none>)\n"
                 "  -L, --lang\t\tOutput language (default: C)\n"
-                "  -M, --module\t\tModule (default: <none>)\n"
-                "  -N, --name\t\tVariable name (default: FILEDATA)\n"
+                "  -M, --module\t\tModule (default: ASSETS)\n"
                 "  -C, --cols\t\tNumber of dump columns (default: 10)\n"
-                "  -H, --hash\t\tHash value (default: <none>)\n"
+                "  -H, --hash\t\tHash method (MD5, SHA1, MURMUR) (default: <none>)\n"
                 "  -?, --help\t\tthis help usage\n"
                 "\n\n"
             );
