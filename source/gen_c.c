@@ -16,6 +16,9 @@ void write_c_header(FILE *dest, config_t *cfg, int file_count)
 
     fwrite("#if _MSC_VER > 1000\n#   pragma once\n#endif\n\n", 1, 44, dest);
 
+    if (cfg->gzip)
+        fprintf(dest, "#define %s_GZIPED 1\n", unamemodule);
+
     fprintf(dest, "#define %s_FCOUNT %d\n\n", unamemodule, file_count);
 }
 
@@ -85,18 +88,14 @@ void write_c_body(FILE *dest, FILE *source, config_t *cfg, const char *source_pa
     } while (n != 0);
 
     fprintf(dest, "\n};\n\n");
-
 }
 
 void write_c_footer(FILE *dest, config_t *cfg)
 {
     int i;
+    char unamemodule[1024] = {0};
 
-    fwrite("#endif // _", 1, 11, dest);
+    to_upper_normalize(unamemodule, cfg->module);
 
-    for (i = 0; i < strlen(cfg->module); ++i) {
-        fprintf(dest, "%c", toupper(cfg->module[i]));
-    }
-
-    fwrite("_H_", 1, 3, dest);
+    fprintf(dest, "#endif // _%s_H_", unamemodule);
 }

@@ -38,8 +38,7 @@ void write_footer(FILE *dest, config_t *cfg)
 
 int main(int argc, char *argv[])
 {
-    FILE *fp, *fr = NULL;
-    size_t n;
+    FILE *fp = NULL;
     config_t cfg;
     int z = 0, i = xxoh_getopt(argc, argv);
     char wd[1024] = {0};
@@ -52,21 +51,25 @@ int main(int argc, char *argv[])
     }
 
     if (cfg.wrap)
-        write_header(stdout, &cfg, argc - i);
+        write_header(stdout, &cfg, cfg.stdind ? 1 : argc - i);
 
-    for (; i < argc; ++i) {
-        z++;
+    if (cfg.stdind) {
+        write_body(stdout, stdin, &cfg, cfg.name, 1);
+    } else {
+        for (; i < argc; ++i) {
+            z++;
 
-        fp = fopen(argv[i], "r");
+            fp = fopen(argv[i], "r");
 
-        if (!fp) {
-            fprintf(stderr, "Cannot open \"%s\" %s\n", argv[i], strerror(errno));
-            goto invalid_ended;
+            if (!fp) {
+                fprintf(stderr, "Cannot open \"%s\" %s\n", argv[i], strerror(errno));
+                goto invalid_ended;
+            }
+
+            write_body(stdout, fp, &cfg, argv[i], z);
+            
+            fclose(fp);
         }
-
-        write_body(stdout, fp, &cfg, argv[i], z);
-        
-        fclose(fp);
     }
 
     if (cfg.wrap)

@@ -4,6 +4,7 @@
 #include <ctype.h> 
 
 #define tolower(c) (unsigned char)((c) | 0x20)
+#define isalpha(c)   (tolower(c) >= 'a' && tolower(c) <= 'z')
 
 unsigned short hashl_37(void *str)
 {
@@ -29,10 +30,10 @@ const char * env_cstr(const char *name, const char *def)
 
 unsigned char env_bool(const char *name, unsigned char def)
 {
-    const char *out         = getenv(name);
-    unsigned char *p        = (unsigned char*) out;
-    unsigned char c, val    = 0;
-    unsigned int  i         = 0;
+    const char *out          = getenv(name);
+    unsigned char *p         = (unsigned char*) out;
+    unsigned char c = 0, val = 0;
+    unsigned int  i          = 0;
 
     if (out == NULL)
         return def;
@@ -121,21 +122,23 @@ void to_upper(char *dest, char *source)
     }
 }
 
-void to_upper_normalize(char *dest, char *source)
+int to_upper_normalize(char *dest, char *source)
 {
-    for (int i = 0; i < strlen(source); ++i) {
+    int i, c = 0;
+    
+    for (i = 0; i < strlen(source); ++i) {
         switch (source[i]) {
         case '.':
         case '-':
-        case '+':
-        case '@':
-        case '$':
-        case '*':
         case ' ':
-            dest[i] = '_';
+            dest[c++] = '_';
             break;
         default:
-            dest[i] = toupper(source[i]);
+            if (isalpha(source[i])) {
+                dest[c++] = toupper(source[i]);
+            }
         }
     }
+
+    return c;
 }

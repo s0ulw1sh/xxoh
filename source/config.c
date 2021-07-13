@@ -11,11 +11,13 @@ void xxoh_getconfig(config_t *cfg)
 {
     cfg->gzip   = env_bool("XXOH_GZIP", DEFAULT_GZIP);
     cfg->wrap   = env_bool("XXOH_WRAP", 1);
+    cfg->stdind = env_bool("XXOH_STDIN", 0);
     cfg->lang   = hashl_37(env_cstr("XXOH_LANG", DEFAULT_LANG));
     cfg->cols   = env_uint("XXOH_COLS", DEFAULT_COLS);
     cfg->hash   = hashl_37(env_cstr("XXOH_HASH", DEFAULT_HASH));
     cfg->cwd    = env_cstr("XXOH_CWD", NULL);
     cfg->module = env_cstr("XXOH_MODULE", DEFAULT_MODULE);
+    cfg->name   = env_cstr("XXOH_NAME", DEFAULT_NAME);
 }
 
 int xxoh_getopt(int argc, const char *argv[])
@@ -29,9 +31,9 @@ int xxoh_getopt(int argc, const char *argv[])
         {"wrap",     required_argument, &flag_buf,  'P' },
         {"module",   required_argument, &flag_buf,  'M' },
         {"lang",     required_argument, &flag_buf,  'L' },
-        {"name",     required_argument, &flag_buf,  'N' },
         {"cols",     required_argument, &flag_buf,  'C' },
         {"hash",     required_argument, &flag_buf,  'H' },
+        {"stdin",    required_argument, &flag_buf,  'I' },
         {"help",     no_argument,       &flag_buf,  '?' },
         {0,          0,                 0,          0x0 }
     };
@@ -40,7 +42,7 @@ int xxoh_getopt(int argc, const char *argv[])
 
         int option_index = 0;
 
-        c = getopt_long(argc, (char * const*)argv, "Z:L:M:W:P:C:H:?",
+        c = getopt_long(argc, (char * const*)argv, "Z:L:M:W:P:C:H:I:?",
                  long_options, &option_index);
         
         if (c == -1) {
@@ -60,6 +62,10 @@ int xxoh_getopt(int argc, const char *argv[])
         case 'W': setenv("XXOH_CWD",    optarg, 1); break;
         case 'M': setenv("XXOH_MODULE", optarg, 1); break;
         case 'P': setenv("XXOH_WRAP",   optarg, 1); break;
+        case 'I':
+            setenv("XXOH_STDIN",  "1", 1);
+            setenv("XXOH_NAME",   optarg, 1);
+            break;
 
         case '?':
             printf(
@@ -74,7 +80,8 @@ int xxoh_getopt(int argc, const char *argv[])
                 "  -L, --lang\t\tOutput language (default: C)\n"
                 "  -M, --module\t\tModule (default: ASSETS)\n"
                 "  -C, --cols\t\tNumber of dump columns (default: 10)\n"
-                "  -H, --hash\t\tHash method (MD5, SHA1, MURMUR) (default: <none>)\n"
+                "  -H, --hash\t\tHash method (MD5, SHA1) (default: <none>)\n"
+                "  -I, --stdin\t\tSource data from STDIN (-I name)\n"
                 "  -?, --help\t\tthis help usage\n"
                 "\n\n"
             );

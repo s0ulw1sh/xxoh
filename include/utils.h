@@ -17,6 +17,6 @@ unsigned int get_basename(char *dest, char *path);
 
 void to_upper(char *dest, char *source);
 
-void to_upper_normalize(char *dest, char *source);
+int to_upper_normalize(char *dest, char *source);
 
 #endif // _UTILS_H_
