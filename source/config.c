@@ -14,7 +14,7 @@ void xxoh_getconfig(config_t *cfg)
     cfg->stdind = env_bool("XXOH_STDIN", 0);
     cfg->lang   = hashl_37(env_cstr("XXOH_LANG", DEFAULT_LANG));
     cfg->cols   = env_uint("XXOH_COLS", DEFAULT_COLS);
-    cfg->hash   = hashl_37(env_cstr("XXOH_HASH", DEFAULT_HASH));
+    cfg->hash   = hashl_37(env_cstr("XXOH_HASH", NULL));
     cfg->cwd    = env_cstr("XXOH_CWD", NULL);
     cfg->module = env_cstr("XXOH_MODULE", DEFAULT_MODULE);
     cfg->name   = env_cstr("XXOH_NAME", DEFAULT_NAME);
@@ -55,7 +55,6 @@ int xxoh_getopt(int argc, const char *argv[])
 
         switch (c) {
         case 'Z': setenv("XXOH_GZIP",   "1", 1);    break;
-        case 'D': setenv("XXOH_DEST",   optarg, 1); break;
         case 'L': setenv("XXOH_LANG",   optarg, 1); break;
         case 'C': setenv("XXOH_COLS",   optarg, 1); break;
         case 'H': setenv("XXOH_HASH",   optarg, 1); break;

@@ -1,6 +1,8 @@
 #include "gen_c.h"
 #include "utils.h"
 #include "crc.h"
+#include "md5.h"
+#include "sha1.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -32,6 +34,14 @@ void write_c_body(FILE *dest, FILE *source, config_t *cfg, const char *source_pa
     char unamemodule[1024] = {0};
     char buffer[4096];
     crc32_t crc;
+    md5_t md5;
+    sha1_t sha1;
+
+    if (cfg->hash == MD5_HASH)
+        md5_init(&md5);
+
+    if (cfg->hash == SHA1_HASH)
+        sha1_init(&sha1);
 
     crc32_init(&crc);
 
@@ -73,6 +83,13 @@ void write_c_body(FILE *dest, FILE *source, config_t *cfg, const char *source_pa
 
         if (n > 0) {
             crc32_update(&crc, buffer, n);
+
+            if (cfg->hash == MD5_HASH)
+                md5_update(&md5, buffer, n);
+
+            if (cfg->hash == SHA1_HASH)
+                sha1_update(&sha1, buffer, n);
+
         }
 
         for (c = 0; c < n; ++c) {
@@ -96,6 +113,31 @@ void write_c_body(FILE *dest, FILE *source, config_t *cfg, const char *source_pa
     } while (n != 0);
 
     fprintf(dest, "\n};\n\n");
+
+    if (cfg->hash == MD5_HASH) {
+        md5_final(&md5);
+
+        fprintf(dest, "#define %s_MD5 \"", bnameupn);
+
+        for (i = 0; i < 16; ++i) {
+            fprintf(dest, "%2.2x", md5.digest[i]);
+        }
+
+        fprintf(dest, "\"\n");
+    }
+
+    if (cfg->hash == SHA1_HASH) {
+        sha1_final(&sha1);
+
+        fprintf(dest, "#define %s_SHA1 \"", bnameupn);
+
+        for (i = 0; i < 20; ++i) {
+            fprintf(dest, "%2.2x", sha1.digest[i]);
+        }
+
+        fprintf(dest, "\"\n");
+    }
+
     fprintf(dest, "#define %s_CRC32 %d\n\n", bnameupn, crc.crc);
 }
 

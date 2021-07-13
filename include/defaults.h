@@ -9,7 +9,6 @@
 #define DEFAULT_LANG "C"
 #define DEFAULT_NAME "FILEDATA"
 #define DEFAULT_COLS 10
-#define DEFAULT_HASH ""
 #define DEFAULT_MODULE "ASSETS"
 #define DEFAULT_NAME   "unknown"
 

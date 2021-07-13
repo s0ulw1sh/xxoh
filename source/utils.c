@@ -8,12 +8,18 @@
 
 unsigned short hashl_37(void *str)
 {
-    char *p             = (char *)str;
+    char *p;
     unsigned int    i,
-                    len = strlen(p),
+                    len,
                     acm = 2139062143;
 
-    if (str == NULL || len == 0)
+    if (str == NULL)
+        return 0;
+
+    p   = (char *)str;
+    len = strlen(p);
+
+    if (len == 0)
         return 0;
 
     for (i = 0; i < len; ++i)
