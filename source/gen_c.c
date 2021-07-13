@@ -32,7 +32,7 @@ void write_c_body(FILE *dest, FILE *source, config_t *cfg, const char *source_pa
     char bname[1024]       = {0};
     char bnameupn[1024]    = {0};
     char unamemodule[1024] = {0};
-    char buffer[4096];
+    unsigned char buffer[4096];
     crc32_t crc;
     md5_t md5;
     sha1_t sha1;
@@ -138,7 +138,7 @@ void write_c_body(FILE *dest, FILE *source, config_t *cfg, const char *source_pa
         fprintf(dest, "\"\n");
     }
 
-    fprintf(dest, "#define %s_CRC32 %d\n\n", bnameupn, crc.crc);
+    fprintf(dest, "#define %s_CRC32 %u\n\n", bnameupn, crc.crc);
 }
 
 void write_c_footer(FILE *dest, config_t *cfg)

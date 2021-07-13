@@ -1,5 +1,7 @@
 add_rules("mode.debug", "mode.release")
 
+add_requires("zlib")
+
 target("xxoh")
     set_kind("binary")
 
@@ -16,6 +18,8 @@ target("xxoh")
         set_strip("all")
     end
 
+    add_packages("zlib")
+    
     add_includedirs(
         "$(projectdir)/include"
     )

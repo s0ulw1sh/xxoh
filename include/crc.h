@@ -12,7 +12,10 @@ typedef struct crc32_s crc32_t;
 
 struct crc32_s
 {
-    uint32_t crc;
+    union {
+        uint32_t crc;
+        unsigned char crca[4];
+    };
     uint32_t table[0x100];
 };
 
