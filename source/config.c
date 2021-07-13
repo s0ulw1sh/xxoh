@@ -10,7 +10,7 @@
 void xxoh_getconfig(config_t *cfg)
 {
     cfg->gzip   = env_bool("XXOH_GZIP", DEFAULT_GZIP);
-    cfg->wrap   = env_bool("XXOH_WRAP", 1);
+    cfg->nowrap = env_bool("XXOH_NOWRAP", 0);
     cfg->stdind = env_bool("XXOH_STDIN", 0);
     cfg->lang   = hashl_37(env_cstr("XXOH_LANG", DEFAULT_LANG));
     cfg->cols   = env_uint("XXOH_COLS", DEFAULT_COLS);
@@ -28,7 +28,7 @@ int xxoh_getopt(int argc, const char *argv[])
     static struct option long_options[] = {
         {"gzip",     required_argument, &flag_buf,  'Z' },
         {"cwd",      required_argument, &flag_buf,  'W' },
-        {"wrap",     required_argument, &flag_buf,  'P' },
+        {"nowrap",   required_argument, &flag_buf,  'N' },
         {"module",   required_argument, &flag_buf,  'M' },
         {"lang",     required_argument, &flag_buf,  'L' },
         {"cols",     required_argument, &flag_buf,  'C' },
@@ -42,7 +42,7 @@ int xxoh_getopt(int argc, const char *argv[])
 
         int option_index = 0;
 
-        c = getopt_long(argc, (char * const*)argv, "Z:L:M:W:P:C:H:I:?",
+        c = getopt_long(argc, (char * const*)argv, "ZNL:M:W:C:H:I:?",
                  long_options, &option_index);
         
         if (c == -1) {
@@ -54,14 +54,14 @@ int xxoh_getopt(int argc, const char *argv[])
         }
 
         switch (c) {
-        case 'Z': setenv("XXOH_GZIP",   optarg, 1); break;
+        case 'Z': setenv("XXOH_GZIP",   "1", 1);    break;
         case 'D': setenv("XXOH_DEST",   optarg, 1); break;
         case 'L': setenv("XXOH_LANG",   optarg, 1); break;
         case 'C': setenv("XXOH_COLS",   optarg, 1); break;
         case 'H': setenv("XXOH_HASH",   optarg, 1); break;
         case 'W': setenv("XXOH_CWD",    optarg, 1); break;
         case 'M': setenv("XXOH_MODULE", optarg, 1); break;
-        case 'P': setenv("XXOH_WRAP",   optarg, 1); break;
+        case 'N': setenv("XXOH_NOWRAP", "1",    1); break;
         case 'I':
             setenv("XXOH_STDIN",  "1", 1);
             setenv("XXOH_NAME",   optarg, 1);
@@ -75,7 +75,7 @@ int xxoh_getopt(int argc, const char *argv[])
                 "Usage: xxoh [options] <file|s>\n\n"
 
                 "Common options:\n"
-                "  -Z, --gzip\t\tUse gzip compression (ON|OFF) (default: OFF)\n"
+                "  -Z, --gzip\t\tUse gzip compression (default: OFF)\n"
                 "  -D, --dest\t\tSingle destination file (default: <none>)\n"
                 "  -L, --lang\t\tOutput language (default: C)\n"
                 "  -M, --module\t\tModule (default: ASSETS)\n"

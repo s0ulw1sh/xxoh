@@ -1,5 +1,6 @@
 #include "gen_c.h"
 #include "utils.h"
+#include "crc.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -30,6 +31,9 @@ void write_c_body(FILE *dest, FILE *source, config_t *cfg, const char *source_pa
     char bnameupn[1024]    = {0};
     char unamemodule[1024] = {0};
     char buffer[4096];
+    crc32_t crc;
+
+    crc32_init(&crc);
 
     to_upper_normalize(unamemodule, cfg->module);
     get_basename(bname, source_path);
@@ -67,6 +71,10 @@ void write_c_body(FILE *dest, FILE *source, config_t *cfg, const char *source_pa
             fprintf(dest, ", ");
         }
 
+        if (n > 0) {
+            crc32_update(&crc, buffer, n);
+        }
+
         for (c = 0; c < n; ++c) {
 
             if (c > 0 && c < n) {
@@ -88,6 +96,7 @@ void write_c_body(FILE *dest, FILE *source, config_t *cfg, const char *source_pa
     } while (n != 0);
 
     fprintf(dest, "\n};\n\n");
+    fprintf(dest, "#define %s_CRC32 %d\n\n", bnameupn, crc.crc);
 }
 
 void write_c_footer(FILE *dest, config_t *cfg)

@@ -9,7 +9,7 @@ typedef struct config_s config_t;
 
 struct config_s {
     unsigned char  gzip, *name, *cwd, *module;
-    unsigned int   lang, cols, hash, wrap, stdind;
+    unsigned int   lang, cols, hash, nowrap, stdind;
     int lastpind;
 };
 

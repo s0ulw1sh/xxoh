@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
         chdir(cfg.cwd);
     }
 
-    if (cfg.wrap)
+    if (!cfg.nowrap)
         write_header(stdout, &cfg, cfg.stdind ? 1 : argc - i);
 
     if (cfg.stdind) {
@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    if (cfg.wrap)
+    if (!cfg.nowrap)
         write_footer(stdout, &cfg);
 
     return 0;
