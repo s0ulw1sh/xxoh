@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#define CHUNK_SIZE 4096
+
 void write_c_header(FILE *dest, config_t *cfg, int file_count)
 {
     int i;
@@ -32,10 +34,10 @@ void write_c_body(FILE *dest, FILE *source, config_t *cfg, const char *source_pa
     char bname[1024]       = {0};
     char bnameupn[1024]    = {0};
     char unamemodule[1024] = {0};
-    unsigned char buffer[4096];
+    unsigned char buffer[CHUNK_SIZE];
     crc32_t crc;
-    md5_t md5;
-    sha1_t sha1;
+    md5_t   md5;
+    sha1_t  sha1;
 
     if (cfg->hash == MD5_HASH)
         md5_init(&md5);
@@ -75,7 +77,7 @@ void write_c_body(FILE *dest, FILE *source, config_t *cfg, const char *source_pa
     fprintf(dest, "static unsigned char %s_DATA[] = {\n\t", bnameupn);
 
     do {
-        n = fread(buffer, 1, 4096, source);
+        n = fread(buffer, 1, CHUNK_SIZE, source);
 
         if (b > 0 && n != 0) {
             fprintf(dest, ", ");
@@ -116,26 +118,12 @@ void write_c_body(FILE *dest, FILE *source, config_t *cfg, const char *source_pa
 
     if (cfg->hash == MD5_HASH) {
         md5_final(&md5);
-
-        fprintf(dest, "#define %s_MD5 \"", bnameupn);
-
-        for (i = 0; i < 16; ++i) {
-            fprintf(dest, "%2.2x", md5.digest[i]);
-        }
-
-        fprintf(dest, "\"\n");
+        fprintf(dest, "#define %s_MD5 \"%s\"\n", bnameupn, md5.digesthex);
     }
 
     if (cfg->hash == SHA1_HASH) {
         sha1_final(&sha1);
-
-        fprintf(dest, "#define %s_SHA1 \"", bnameupn);
-
-        for (i = 0; i < 20; ++i) {
-            fprintf(dest, "%2.2x", sha1.digest[i]);
-        }
-
-        fprintf(dest, "\"\n");
+        fprintf(dest, "#define %s_SHA1 \"%s\"\n", bnameupn, sha1.digesthex);
     }
 
     fprintf(dest, "#define %s_CRC32 %u\n\n", bnameupn, crc.crc);

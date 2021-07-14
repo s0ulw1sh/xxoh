@@ -19,4 +19,6 @@ void to_upper(char *dest, char *source);
 
 int to_upper_normalize(char *dest, char *source);
 
+void bintohexstr(char *dest, void *data, unsigned int len);
+
 #endif // _UTILS_H_

@@ -1,5 +1,5 @@
-#ifndef _GEN_SHA1_H_
-#define _GEN_SHA1_H_ 1
+#ifndef _SHA1_H_
+#define _SHA1_H_ 1
 
 #if _MSC_VER > 1000
 #   pragma once
@@ -19,12 +19,14 @@ struct sha1_s {
         uint8_t  digest[20];
     };
 
+    char     digesthex[41];
+
     union {
         uint32_t w[16];
         uint8_t  buffer[64];
     };
 
-    size_t size;
+    size_t   size;
     uint64_t totalSize;
 };
 
@@ -34,4 +36,4 @@ void sha1_update(sha1_t *ctx, void *data, size_t length);
 
 void sha1_final(sha1_t *ctx);
 
-#endif // _GEN_SHA1_H_
+#endif // _SHA1_H_

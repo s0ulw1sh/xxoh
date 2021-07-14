@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <ctype.h> 
 
-#define tolower(c) (unsigned char)((c) | 0x20)
+#define tolower(c)   (unsigned char)((c) | 0x20)
 #define isalpha(c)   (tolower(c) >= 'a' && tolower(c) <= 'z')
 
 unsigned short hashl_37(void *str)
@@ -147,4 +147,15 @@ int to_upper_normalize(char *dest, char *source)
     }
 
     return c;
+}
+
+void bintohexstr(char *dest, void *data, unsigned int len)
+{
+    unsigned char *p        = (unsigned char*) data;
+    const char xx[]         = "0123456789abcdef";
+    long size               = len * 2;
+    
+    while (--size >= 0) {
+        dest[size] = xx[(p[size>>1] >> ((1 - (size&1)) << 2)) & 0xF];
+    }
 }

@@ -1,4 +1,5 @@
 #include "sha1.h"
+#include "utils.h"
 
 #include <string.h>
 
@@ -139,4 +140,7 @@ void sha1_final(sha1_t *ctx)
     for(i = 0; i < 5; i++) {
        ctx->h[i] = htobe32(ctx->h[i]);
     }
+
+    memset(ctx->digesthex, 0, 41);
+    bintohexstr(ctx->digesthex, ctx->digest, 20);
 }

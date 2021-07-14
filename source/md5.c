@@ -1,4 +1,7 @@
 #include "md5.h"
+#include "utils.h"
+
+#include <string.h>
 
 static uint32_t S[] = {
             7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
@@ -149,4 +152,7 @@ void md5_final(md5_t *ctx)
         ctx->digest[(i * 4) + 2] = (uint8_t)((ctx->buffer[i] & 0x00FF0000) >> 16);
         ctx->digest[(i * 4) + 3] = (uint8_t)((ctx->buffer[i] & 0xFF000000) >> 24);
     }
+
+    memset(ctx->digesthex, 0, 33);
+    bintohexstr(ctx->digesthex, ctx->digest, 16);
 }
