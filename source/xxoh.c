@@ -35,6 +35,8 @@ void write_body(FILE *dest, FILE *source, config_t *cfg, const char *source_path
             return;
         }
 
+        fseek(source, 0L, SEEK_SET);
+
         source = tmp;
     }
 
