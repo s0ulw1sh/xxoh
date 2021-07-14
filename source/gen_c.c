@@ -91,7 +91,6 @@ void write_c_body(FILE *dest, FILE *source, config_t *cfg, const char *source_pa
 
             if (cfg->hash == SHA1_HASH)
                 sha1_update(&sha1, buffer, n);
-
         }
 
         for (c = 0; c < n; ++c) {

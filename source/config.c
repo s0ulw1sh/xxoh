@@ -76,7 +76,7 @@ int xxoh_getopt(int argc, const char *argv[])
                 "Common options:\n"
                 "  -Z, --gzip\t\tUse gzip compression (default: OFF)\n"
                 "  -D, --dest\t\tSingle destination file (default: <none>)\n"
-                "  -L, --lang\t\tOutput language (default: C)\n"
+                "  -L, --lang\t\tOutput language (C, RAW) (default: C)\n"
                 "  -M, --module\t\tModule (default: ASSETS)\n"
                 "  -C, --cols\t\tNumber of dump columns (default: 10)\n"
                 "  -H, --hash\t\tHash method (MD5, SHA1) (default: <none>)\n"

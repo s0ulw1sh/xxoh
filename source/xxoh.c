@@ -8,6 +8,7 @@
 #include <unistd.h>
 
 #include "gen_c.h"
+#include "gen_raw.h"
 #include "crc.h"
 #include "gzip.h"
 
@@ -35,14 +36,17 @@ void write_body(FILE *dest, FILE *source, config_t *cfg, const char *source_path
             return;
         }
 
-        fseek(source, 0L, SEEK_SET);
-
         source = tmp;
+
+        fseek(source, 0L, SEEK_SET);
     }
 
     switch(cfg->lang) {
     case CLANG_HASH:
         write_c_body(dest, source, cfg, source_path, index);
+        break;
+    case RAW_HASH:
+        write_raw_body(dest, source, cfg, source_path, index);
         break;
     }
 
