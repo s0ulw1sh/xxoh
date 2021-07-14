@@ -27,7 +27,10 @@ void write_body(FILE *dest, FILE *source, config_t *cfg, const char *source_path
     if (cfg->gzip) {
         tmp = tmpfile();
 
-        if (ferror(tmp) || gzip_file(tmp, source)) {
+        if (ferror(tmp))
+            return;
+
+        if (gzip_file(tmp, source)) {
             fclose(tmp);
             return;
         }
