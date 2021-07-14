@@ -3,12 +3,12 @@
 
 #include <string.h>
 
-#define W(t) w[(t) & 0x0F]
-#define ROL32(a, n) (((a) << (n)) | ((a) >> (32 - (n))))
-#define CH(x, y, z) (((x) & (y)) | (~(x) & (z)))
+#define W(t)            w[(t) & 0x0F]
+#define ROL32(a, n)     (((a) << (n)) | ((a) >> (32 - (n))))
+#define CH(x, y, z)     (((x) & (y)) | (~(x) & (z)))
 #define PARITY(x, y, z) ((x) ^ (y) ^ (z))
-#define MAJ(x, y, z) (((x) & (y)) | ((x) & (z)) | ((y) & (z)))
-#define MIN(a, b) ((a) < (b) ? (a) : (b))
+#define MAJ(x, y, z)    (((x) & (y)) | ((x) & (z)) | ((y) & (z)))
+#define MIN(a, b)       ((a) < (b) ? (a) : (b))
 
 #define htobe32(x) ( \
     (((uint32_t)(x) & 0x000000FFUL) << 24) | \
@@ -16,11 +16,7 @@
     (((uint32_t)(x) & 0x00FF0000UL) >> 8) | \
     (((uint32_t)(x) & 0xFF000000UL) >> 24))
 
-#define betoh32(x) ( \
-    (((uint32_t)(x) & 0x000000FFUL) << 24) | \
-    (((uint32_t)(x) & 0x0000FF00UL) << 8) | \
-    (((uint32_t)(x) & 0x00FF0000UL) >> 8) | \
-    (((uint32_t)(x) & 0xFF000000UL) >> 24))
+#define betoh32 htobe32
 
 static const uint8_t padding[64] =
 {
